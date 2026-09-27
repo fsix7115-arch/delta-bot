@@ -81,6 +81,35 @@ This is the distinction that matters and a net-only report cannot make:
 Here it is the first case, and the fix is not a better strategy. It is **fewer
 trades**.
 
+## Full sweep: all 32 configurations, both symbols
+
+`results/intraday.csv`, 16 configs each on ETHUSD and BTCUSD 15m.
+
+| | ETHUSD | BTCUSD |
+|---|---|---|
+| Configs | 16 | 16 |
+| Sharpe range | -5.05 to **-2.99** | -6.92 to **-4.07** |
+| Positive Sharpe | **0 of 16** | **0 of 16** |
+| Net return range | -99.1% to -78.0% | -97.9% to -78.8% |
+| Positive net | **0 of 16** | **0 of 16** |
+| Gross range | -25.1% to **+14.3%** | -16.6% to **+48.9%** |
+| Positive gross | 3 of 16 | **10 of 16** |
+| Trades | 3,228 - 10,403 | 3,026 - 9,301 |
+
+**Not one configuration out of 32 was profitable net.** The best of the bad
+lot lost 78% of capital.
+
+The BTC gross column is the more interesting one, and it was the last result
+in the run. **10 of 16 BTC configs had a positive gross return, the best at
++48.9%, while every one of them lost money net.** ETH managed only 3 of 16.
+
+That is a cleaner statement of the problem than the 106x figure: on BTC, this
+pattern does find profitable price movement. It captures roughly a quarter of
+capital gross across five to nine thousand trades — about 0.005% per trade —
+and then pays 0.18% per trade to the exchange. It is not that the strategy
+fails to find anything. It is that the venue takes far more than the strategy
+earns.
+
 ## What the data says about trade count
 
 | Config | Trades | Sharpe |

@@ -61,14 +61,19 @@ ever prints a Sharpe above ~3, assume a bug until proven otherwise.
 ## Getting started
 
 ```bash
-pip install pandas numpy
-python3 test_engine.py        # 11 tests, must pass before trusting anything
-python3 test_lookahead.py     # guards the pattern detectors
-python3 fetch_data.py         # Delta candles, ~2 years (no API key needed)
-python3 fetch_extended.py     # 6 years of Binance candles + real funding rates
-python3 fetch_sentiment.py    # Fear & Greed index, 2018 to now
-python3 hybrid_6y.py          # reproduce the headline result
+bash setup.sh                            # deps, tests, data — ~8 min
+SOURCE=binance python3 hybrid_6y.py      # reproduce the headline result
+python3 shadow.py                        # live signal, places no orders
 ```
+
+`setup.sh` runs the test suite first and stops if anything fails. If the 11
+engine tests or the lookahead regression do not pass, no result in this
+repository should be believed.
+
+To reproduce the headline number you also need the 6-year Binance data, which
+`setup.sh` fetches. `.env` is not published; supply your own Delta credentials
+if you want the read-only account checks. Trading permission is neither needed
+nor wanted.
 
 ## Layout
 

@@ -1,47 +1,64 @@
-# Fsix
+# ARYX
 
-Quantitative backtesting research for crypto perpetuals.
+I build small tools for problems that are annoying to diagnose and boring to
+fix, and I write down what actually happened rather than what was supposed to.
 
-I build engines that are hard to fool, and I write down the ways I fooled
-mine.
+## Projects
 
-## What I'm working on
+**[devcheck](https://github.com/fsix7115-arch/devcheck)** — is your dev machine
+healthy, or just populated? No dependencies, read-only, safe in CI.
+
+The failure it exists for: Cloudflare answers Groq with `error code: 1010` to
+any client that does not send a browser `User-Agent`, which includes
+`urllib` and `curl`'s default. The tool is installed, the key is valid, the
+call still fails, and the error says nothing about keys, so it reads as "my
+credentials are wrong" and sends you off to regenerate a working key. devcheck
+sends the same request twice, bare and with a User-Agent, and reports the
+difference as a property of your network rather than your account.
+
+It also flags version floors that actually break workflows, and reports real
+free disk space, which explains more strange failures than it has any right to.
+
+**[freellm-probe](https://github.com/fsix7115-arch/freellm-probe)** — find out
+which free LLM APIs work from your machine, right now. No dependencies.
+
+Every free-LLM aggregator README has a provider table, and the table is wrong
+within a month. It was written on the author's machine, in their country, on
+their IP, on a day when the keys worked. Four things break that no README
+mentions:
+
+- Groq returns Cloudflare `error code: 1010` to any client that does not send
+  a browser `User-Agent`. Python's `urllib` does not, so the error reads as
+  "your key is bad." It isn't.
+- A valid Gemini key can list 50 models and successfully call none of them.
+  `gemini-2.0-flash` returns *"no longer available to new users"* on a key
+  that authenticates fine.
+- `llama-3.3-70b-versatile` is in every Groq tutorial. It 404s now. The catalog
+  endpoint is the source of truth, not the docs.
+- The free tier is a shared pool: roughly one call in four returns a 503.
 
 **[delta-bot](https://github.com/fsix7115-arch/delta-bot)** — a no-lookahead
-backtesting engine for BTC/ETH perpetual futures on Delta Exchange India.
+backtesting engine for crypto perpetuals on Delta Exchange India.
 
-The current result: order block entries gated by crypto sentiment, on ETHUSD 1d,
-Sharpe **0.94** out-of-sample over six years. It holds at 0.85 with costs
-doubled. 129 trades, -14.9% maximum drawdown, against a buy-and-hold of +8.8%
-over the same window.
+The headline result is ETHUSD 1d, order block entries gated by sentiment:
+Sharpe **0.94** out-of-sample over six years, 0.85 at doubled costs, 129
+trades, -14.9% max drawdown. The same strategy printed 2.88 on two years of
+data. Both numbers are in the README, because a backtest that only shows the
+flattering one is a sales pitch.
 
-That number is the smallest one worth quoting. The same strategy printed
-Sharpe 2.88 on two years of data before the 2020 crash and 2022 bear market
-were folded in. Both numbers are in the README, because a backtest that only
-shows the flattering one is a sales pitch, not evidence.
+Most of that repo is not finding strategies. It is finding the places where a
+backtest lies to you: a pattern detector that read three candles into the
+future, a Sharpe denominator that shrank every time a strategy sat flat
+(Sharpe 680), funding charged twice per settlement. If a Sharpe above 3 shows
+up, I assume a bug until I can explain it.
 
 ## What I care about
 
-Most of the work here is not finding strategies. It is finding the places where
-a backtest lies to you:
-
-- **Lookahead leaks.** A pattern detector that tags a block at its birth bar
-  while reading the next three candles for confirmation. It produced an 87% win
-  rate and a 1643% CAGR.
-- **Volatility denominators that shrink.** Dropping zero-return bars from a
-  Sharpe calculation makes a strategy that sits flat look brilliant. It
-  produced Sharpe 680.
-- **Costs that don't get charged.** Pattern signals with no holding period open
-  and close on the same bar, skipping the round-trip fee entirely.
-
-The rule I work by: if a Sharpe above 3 shows up, I assume a bug until I can
-explain it.
+Verifying claims against the machine instead of the documentation. Both
+projects here exist because the docs were confidently wrong and I only found
+out by running the thing.
 
 ## Tooling
 
-Free-tier LLM routing across Gemini and Groq, with retry logic for the shared
-free tier's 503s. The whole project runs on two CPU cores.
-
-## Elsewhere
-
-- Ask me about the bugs. That's the interesting part.
+Python standard library, no framework, two CPU cores. Everything published is
+MIT licensed and runs on a bare Python install.

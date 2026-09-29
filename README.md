@@ -1,5 +1,10 @@
 # delta-bot
 
+[![test](https://github.com/fsix7115-arch/delta-bot/actions/workflows/test.yml/badge.svg)](https://github.com/fsix7115-arch/delta-bot/actions/workflows/test.yml)
+[![tests](https://img.shields.io/badge/engine%20tests-11%20passing-brightgreen)](test_engine.py)
+[![no-lookahead](https://img.shields.io/badge/no--lookahead-verified-00ADD8)](test_lookahead.py)
+[![Python](https://img.shields.io/badge/python-3.9%2B-3776AB?logo=python&logoColor=white)](requirements-test.txt)
+
 Backtesting research for BTC/ETH perpetual futures on Delta Exchange India.
 
 The headline number is easy to get wrong. This project is mostly about the

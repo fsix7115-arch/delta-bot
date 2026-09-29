@@ -1,0 +1,11 @@
+# Minimum versions sufficient to run the engine tests.
+# These are lower bounds, not exact pins — the results in the README were
+# produced on numpy 2.5 / pandas 3.0, and the no-lookahead property under test
+# is a property of the engine, not of a particular array library version.
+#
+# Only test_engine.py and test_lookahead.py are run in CI. The sweep and
+# reporting scripts additionally need scipy and matplotlib, which are not
+# required to verify the no-lookahead property.
+numpy>=2.0
+pandas>=2.0
+pytest>=8.0
